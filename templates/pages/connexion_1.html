@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Connexion - Mon Projet{% endblock %}
+
+{% block login_content %}
+<div class="login-form">
+	<h2>Connexion</h2>
+
+	{% if form.errors %}
+	<div style="color: purple; margin-bottom: 15px;">
+		{{ form.errors }}
+	</div>
+	{% endif %}
+
+	<form method="post">
+		{% csrf_token %}
+		<div class="form-group">
+			<label for="{{ form.username.id_for_label }}">Identifiant</label>
+			{{ form.username }}
+		</div>
+
+		<div class="form-group">
+			<label for="{{ form.password.id_for_label }}">Mot de passe</label>
+			{{ form.password }}
+		</div>
+
+		<button type="submit" class="btn">Se connecter</button>
+	</form>
+
+</div>
+{% endblock %}
+

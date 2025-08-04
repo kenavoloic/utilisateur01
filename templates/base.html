@@ -1,119 +1,79 @@
 <!DOCTYPE html>
-<html lang="fr">
-
+<html lang="fr" data-theme="light">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>{% block title %}Mon Projet{% endblock %}</title>
-	<style>
-		body {
-			font-family: Arial, sans-serif;
-			margin: 0;
-			padding: 20px;
-			background-color: #f5f5f5;
-		}
-
-		.container {
-			max-width: 800px;
-			margin: 0 auto;
-			background: white;
-			padding: 20px;
-			border-radius: 8px;
-			box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-		}
-
-		.navbar {
-			background: #333;
-			padding: 1rem;
-			margin: -20px -20px 20px -20px;
-			border-radius: 8px 8px 0 0;
-		}
-
-		.navbar a {
-			color: white;
-			text-decoration: none;
-			margin-right: 15px;
-			padding: 8px 16px;
-			border-radius: 4px;
-			transition: background 0.3s;
-		}
-
-		.navbar a:hover {
-			background: #555;
-		}
-
-		.logout-btn {
-			float: right;
-			background: #d32f2f;
-		}
-
-		.logout-btn:hover {
-			background: #b71c1c;
-		}
-
-		.login-form {
-			max-width: 400px;
-			margin: 50px auto;
-			padding: 30px;
-			background: white;
-			border-radius: 8px;
-			box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-		}
-
-		.form-group {
-			margin-bottom: 15px;
-		}
-
-		.form-group label {
-			display: block;
-			margin-bottom: 5px;
-			font-weight: bold;
-		}
-
-		.form-group input {
-			width: 100%;
-			padding: 8px;
-			border: 1px solid #ddd;
-			border-radius: 4px;
-			box-sizing: border-box;
-		}
-
-		.btn {
-			background: #1976d2;
-			color: white;
-			padding: 10px 20px;
-			border: none;
-			border-radius: 4px;
-			cursor: pointer;
-		}
-
-		.btn:hover {
-			background: #1565c0;
-		}
-	</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mon Projet{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
 </head>
-
 <body>
-	{% if user.is_authenticated %}
-	<div class="container">
-		<nav class="navbar">
-			<a href="{% url 'pages:accueil' %}">Accueil</a>
-			<a href="{% url 'pages:pageA' %}">Page A</a>
-			<a href="{% url 'pages:pageB' %}">Page B</a>
-			<a href="{% url 'pages:pageC' %}">Page C</a>
-			<a href="{% url 'pages:deconnexion' %}" class="logout-btn">Déconnexion</a>
-		</nav>
+    <!-- Navbar principale toujours visible -->
+    <nav class="top-navbar">
+        <div class="nav-container">
+            <a href="{% if user.is_authenticated %}{% url 'pages:accueil' %}{% else %}/{% endif %}" class="logo">
+                <div class="logo-icon">MP</div>
+            </a>
+            
+            <div class="nav-right">
+                <a href="/admin/" class="admin-link">
+                    <span>⚙️</span>
+                    Admin
+                </a>
+                <button class="theme-toggle" onclick="toggleTheme()" title="Changer le thème">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </div>
+    </nav>
 
-		<div class="content">
-			<h1>{% block header %}{% endblock %}</h1>
-			<p>Bienvenue, {{ user.username }} !</p>
-			{% block content %}{% endblock %}
-		</div>
-	</div>
-	{% else %}
-	{% block login_content %}{% endblock %}
-	{% endif %}
-</body>
+    {% if user.is_authenticated %}
+    <div class="container">
+        <nav class="secondary-navbar">
+            <a href="{% url 'pages:accueil' %}">🏠 Accueil</a>
+            <a href="{% url 'pages:pageA' %}">📄 Page A</a>
+            <a href="{% url 'pages:pageB' %}">📄 Page B</a>
+            <a href="{% url 'pages:pageC' %}">📄 Page C</a>
+            <a href="{% url 'pages:deconnexion' %}" class="logout-btn">🚪 Déconnexion</a>
+        </nav>
+        
+        <div class="content">
+            <h1>{% block header %}{% endblock %}</h1>
+            <p>Bienvenue, <strong>{{ user.username }}</strong> ! 👋</p>
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    {% else %}
+        {% block login_content %}{% endblock %}
+    {% endif %}
 
-</html>
+    <script>
+		// Gestion du thème
+		function toggleTheme() {
+			const html = document.documentElement;
+			const themeIcon = document.getElementById('theme-icon');
+			const currentTheme = html.getAttribute('data-theme');
 
+			if (currentTheme === 'dark') {
+				html.setAttribute('data-theme', 'light');
+				themeIcon.textContent = '🌙';
+				localStorage.setItem('theme', 'light');
+			} else {
+				html.setAttribute('data-theme', 'dark');
+				themeIcon.textContent = '☀️';
+				localStorage.setItem('theme', 'dark');
+			}
+		}
+
+		// Charger le thème sauvegardé au démarrage
+		document.addEventListener('DOMContentLoaded', function () {
+			const savedTheme = localStorage.getItem('theme') || 'light';
+			const themeIcon = document.getElementById('theme-icon');
+
+			document.documentElement.setAttribute('data-theme', savedTheme);
+			themeIcon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+		});
+	</script>
+	</body>
+	
+	</html>
