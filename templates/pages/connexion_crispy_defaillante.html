@@ -1,0 +1,11 @@
+<!-- templates/pages/connexion.html -->
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block login_content %}
+<div class="login-container">
+	<div class="login-form">
+		{% crispy form %}
+	</div>
+</div>
+{% endblock %}

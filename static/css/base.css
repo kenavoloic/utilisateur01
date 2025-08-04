@@ -274,3 +274,25 @@ body {
     display: inline-block;
   }
 }
+
+
+/* crispy-form  */
+.custom-form .form-group {
+    margin-bottom: 20px;
+}
+
+.custom-form .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.custom-form .form-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
